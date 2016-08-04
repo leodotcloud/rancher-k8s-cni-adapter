@@ -1,0 +1,15 @@
+#!/bin/sh
+
+STDINDATA=$1
+
+#TODO: Do this the right way
+ACTUAL_CNI_CONTAINER_NAME=`/opt/cni/bin/docker ps | grep calico-wrapper | awk '{print $1}'`
+
+/opt/cni/bin/docker exec ${ACTUAL_CNI_CONTAINER_NAME} \
+    env CNI_COMMAND=${CNI_COMMAND} \
+        CNI_CONTAINERID=${CNI_CONTAINERID} \
+        CNI_NETNS=${CNI_NETNS} \
+        CNI_IFNAME=${CNI_IFNAME} \
+        CNI_ARGS=${CNI_ARGS} \
+        CNI_PATH=${CNI_PATH} \
+    /opt/rancher/bin/invoke-actual-cni-plugin.sh
